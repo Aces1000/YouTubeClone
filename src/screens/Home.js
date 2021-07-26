@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <SafeAreaView loading={loading} center>
       <Text style={{marginTop: 30}}>This is the Home Screen.</Text>
-      <ListItem/>
+      <ListItem />
     </SafeAreaView>
   );
 };
