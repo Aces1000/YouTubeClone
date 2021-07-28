@@ -6,6 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Home, Search, Notifications } from '../screens';
 import { Image, View, Text } from 'react-native';
 import VideoDetails from '../screens/VideoDetails';
+import { colors } from '../style';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,8 +28,8 @@ const BottomTabs = () => (
       },
     })}
     tabBarOptions={{
-      activeTintColor: 'red',
-      inactiveTintColor: 'gray',
+      activeTintColor: colors.red,
+      inactiveTintColor: colors.gray,
     }}>
     <Tab.Screen name="Home" component={Home} />
     <Tab.Screen name="Search" component={Search} />
