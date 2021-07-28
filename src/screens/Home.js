@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { SafeAreaView, Text } from '../components';
+import { SafeAreaView } from '../components';
 import ListItem from '../components/ListItem';
 import { useRequest } from '../hooks';
-
 
 const Home = () => {
   const { loading } = useRequest(
@@ -12,7 +11,6 @@ const Home = () => {
 
   return (
     <SafeAreaView loading={loading} center>
-      <Text style={{marginTop: 30}}>This is the Home Screen.</Text>
       <ListItem />
     </SafeAreaView>
   );

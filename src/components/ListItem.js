@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import { FlatList, Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { LongPressGestureHandler } from 'react-native-gesture-handler';
-import { images } from '../style/global';
 import { useNavigation } from '@react-navigation/native';
+
+import { images } from '../style/global';
 import colors from '../style/colors';
 
 const ListItem = () => {
@@ -50,30 +49,23 @@ const ListItem = () => {
       videoURL: 'https://www.youtube.com/watch?v=zasQ0jvLDpw',
     },
   ]);
-  //const goToVideoDetails =  ???(videos)???  =>{
-  //const {name,videoURL} = videos;
-  //navigation.navigate('VideoDetails', { name: item.name, videoURL: item.videoURL });
-  //}
-  return (
-    <View style={styles.page}>
-      <FlatList
-        keyExtractor={(item) => item.id}
-        data={videos}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => {
-              //goToVideoDetails
-              navigation.navigate('VideoDetails', { name: item.name, videoURL: item.videoURL });
-            }}>
-            <View style={styles.container}>
-              <Image style={styles.image} source={images.id[item.id]} />
-              <Text style={styles.item}>{item.name}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
+
+  const renderItem = ({ item }) => {
+    const onVideoItemPress = () => {
+      navigation.navigate('VideoDetails', { name: item.name, videoURL: item.videoURL });
+    };
+
+    return (
+      <TouchableOpacity onPress={onVideoItemPress}>
+        <View style={styles.container}>
+          <Image style={styles.image} source={images.id[item.id]} />
+          <Text style={styles.item}>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  return <FlatList keyExtractor={(item) => item.id} data={videos} renderItem={renderItem} />;
 };
 
 const styles = StyleSheet.create({
@@ -98,9 +90,6 @@ const styles = StyleSheet.create({
   image: {
     width: 280,
     height: 130,
-  },
-  page: {
-    backgroundColor: colors.black,
   },
 });
 export default ListItem;
