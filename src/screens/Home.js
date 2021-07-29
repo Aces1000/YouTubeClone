@@ -11,7 +11,7 @@ const Home = () => {
 
   return (
     <SafeAreaView loading={loading} center>
-      <ListItem />
+      <ListItem/>
     </SafeAreaView>
   );
 };

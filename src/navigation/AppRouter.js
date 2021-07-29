@@ -5,6 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Home, Search, Notifications } from '../screens';
 import VideoDetails from '../screens/VideoDetails';
 import { colors } from '../style';
+import SignUp from '../screens/SignUp';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
