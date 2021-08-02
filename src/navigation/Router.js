@@ -2,11 +2,10 @@ import React from 'react';
 
 import AppRouter from './AppRouter';
 import AuthRouter from './AuthRouter';
-import { Login } from '../screens';
+import { useAuth } from '../context';
 
 const Router = () => {
-  // TODO: add authentication flow
-  const isLoggedIn = false;
+  const [isLoggedIn] = useAuth();
 
   return isLoggedIn ? <AppRouter /> : <AuthRouter />;
 };

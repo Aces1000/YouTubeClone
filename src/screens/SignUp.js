@@ -13,6 +13,8 @@ import { Feather } from '@expo/vector-icons';
 import { colors } from '../style';
 import { useNavigation } from '@react-navigation/native';
 
+import { ApiService } from '../services';
+
 const Login = () => {
   const navigation = useNavigation();
   const [data, setData] = useState({
@@ -41,7 +43,6 @@ const Login = () => {
       });
     }
   };
-
 
   const handlePasswordChange = (val) => {
     if (val.trim().length >= 8) {
@@ -76,6 +77,26 @@ const Login = () => {
         ...data,
         isValidUser: false,
       });
+    }
+  };
+
+  const onSignUpPress = async () => {
+    try {
+      const res = await ApiService.post('auth/signup', {
+        username: data.email,
+        password: data.password,
+        name: 'Test',
+        surname: 'Test',
+        description: 'asdsadsa',
+      });
+
+      console.log('-------res-------');
+      console.log(res);
+      console.log('-------res-------\n');
+    } catch (err) {
+      console.log('-------err-------');
+      console.log(err);
+      console.log('-------err-------\n');
     }
   };
 
@@ -147,17 +168,17 @@ const Login = () => {
         )}
 
         <View style={styles.button}>
-          <View style={styles.signIn}>
+          <TouchableOpacity style={styles.signIn} onPress={onSignUpPress}>
             <Text style={[styles.textSign, { color: colors.white }]}> Sign Up</Text>
-          </View>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={
-              (styles.signIn,
+            style={[
+              styles.signIn,
               {
                 marginTop: 15,
-              })
-            }>
+              },
+            ]}>
             <Text
               style={[
                 styles.textSign,
@@ -178,7 +199,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.youtube,
-    
   },
   header: {
     flex: 1,

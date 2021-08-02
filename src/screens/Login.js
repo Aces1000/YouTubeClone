@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -13,8 +14,13 @@ import { Feather } from '@expo/vector-icons';
 import { colors } from '../style';
 import { useNavigation } from '@react-navigation/native';
 
+import { ApiService } from '../services';
+import { useAuth } from '../context';
+
 const Login = () => {
   const navigation = useNavigation();
+  const [, setIsLoggedIn] = useAuth();
+
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -46,17 +52,17 @@ const Login = () => {
       setData({
         ...data,
         password: val,
-        isValidPassword: true
+        isValidPassword: true,
       });
-    }else{
+    } else {
       setData({
         ...data,
         password: val,
         isValidPassword: false,
       });
-
     }
   };
+
   const updateSecureTextEntry = () => {
     setData({
       ...data,
@@ -75,6 +81,23 @@ const Login = () => {
         ...data,
         isValidUser: false,
       });
+    }
+  };
+
+  const onSignUpPress = () => navigation.navigate('SignUp');
+
+  const onSignInPress = async () => {
+    try {
+      await ApiService.post('auth/login', {
+        username: data.email,
+        password: data.password,
+      });
+
+      setIsLoggedIn(true);
+    } catch (err) {
+      console.log('-------err-------');
+      console.log(err);
+      console.log('-------err-------\n');
     }
   };
 
@@ -127,17 +150,17 @@ const Login = () => {
         )}
 
         <View style={styles.button}>
-          <View style={styles.signIn}>
-            <Text style={[styles.textSign, { color: colors.white }]}> Sign in</Text>
-          </View>
+          <TouchableOpacity style={styles.signIn} onPress={onSignInPress}>
+            <Text style={[styles.textSign, { color: colors.white }]}>Sign in</Text>
+          </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('SignUp')}
-            style={
-              (styles.signIn,
+            onPress={onSignUpPress}
+            style={[
+              styles.signIn,
               {
                 marginTop: 15,
-              })
-            }>
+              },
+            ]}>
             <Text
               style={[
                 styles.textSign,
@@ -218,8 +241,8 @@ const styles = StyleSheet.create({
   },
   errorMsg: {
     color: colors.red,
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 });
 
 export default Login;
