@@ -8,7 +8,7 @@ const Router = () => {
   // TODO: add authentication flow
   const isLoggedIn = false;
 
-  return isLoggedIn ? <Login /> : <AuthRouter />;
+  return isLoggedIn ? <AppRouter /> : <AuthRouter />;
 };
 
 export default Router;

@@ -5,14 +5,13 @@ import {
   Text,
   View,
   TextInput,
-  Platform,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../style';
 import { useNavigation } from '@react-navigation/native';
-import SignIn from '.'
 
 const Login = () => {
   const navigation = useNavigation();
@@ -21,28 +20,42 @@ const Login = () => {
     password: '',
     chech_textInputChange: false,
     secureTextEntry: true,
+    isValidUser: true,
+    isValidPassword: true,
   });
   const textInputChange = (val) => {
-    if (val.length != 0) {
+    if (val.trim().length >= 4) {
       setData({
         ...data,
         email: val,
         chech_textInputChange: true,
+        isValidUser: true,
       });
     } else {
       setData({
         ...data,
         email: val,
         chech_textInputChange: false,
+        isValidUser: false,
       });
     }
   };
 
   const handlePasswordChange = (val) => {
-    setData({
-      ...data,
-      password: val,
-    });
+    if (val.trim().length >= 8) {
+      setData({
+        ...data,
+        password: val,
+        isValidPassword: true
+      });
+    }else{
+      setData({
+        ...data,
+        password: val,
+        isValidPassword: false,
+      });
+
+    }
   };
   const updateSecureTextEntry = () => {
     setData({
@@ -51,30 +64,49 @@ const Login = () => {
     });
   };
 
-  
+  const handleValidUser = (val) => {
+    if (val.trim().length >= 4) {
+      setData({
+        ...data,
+        isValidUser: true,
+      });
+    } else {
+      setData({
+        ...data,
+        isValidUser: false,
+      });
+    }
+  };
+
   return (
-    
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={colors.youtube} barStyle="light-content" />
       <View style={styles.header}>
         <Text style={styles.text_header}>YouTube</Text>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.text_footer}>Email</Text>
+        <Text style={styles.text_footer}>Username</Text>
         <View style={styles.action}>
-          <FontAwesome name="user-o" color="#05375a" size={20} />
+          <FontAwesome name="user-o" color={colors.blue} size={20} />
           <TextInput
             onChangeText={(val) => textInputChange(val)}
-            placeholder="Your Email"
+            placeholder="Your Username"
             style={styles.textInput}
             autoCapitalize="none"
+            onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
           />
           {data.chech_textInputChange ? (
-            <Feather name="check-circle" color="green" size={20} />
+            <Feather name="check-circle" color={colors.green} size={20} />
           ) : null}
         </View>
+
+        {data.isValidUser ? null : (
+          <Text style={styles.errorMsg}>Username must be 4 characters long.</Text>
+        )}
+
         <Text style={styles.password}>Password</Text>
         <View style={styles.action}>
-          <FontAwesome name="lock" color="#05375a" size={20} />
+          <FontAwesome name="lock" color={colors.blue} size={20} />
           <TextInput
             secureTextEntry={data.secureTextEntry ? true : false}
             placeholder="Your Password"
@@ -84,20 +116,37 @@ const Login = () => {
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
             {data.secureTextEntry ? (
-              <Feather name="eye-off" color="grey" size={20} />
+              <Feather name="eye-off" color={colors.gray} size={20} />
             ) : (
-              <Feather name="eye" color="grey" size={20} />
+              <Feather name="eye" color={colors.gray} size={20} />
             )}
           </TouchableOpacity>
         </View>
+        {data.isValidPassword ? null : (
+          <Text style={styles.errorMsg}>Password must be 8 characters long.</Text>
+        )}
 
         <View style={styles.button}>
           <View style={styles.signIn}>
             <Text style={[styles.textSign, { color: colors.white }]}> Sign in</Text>
           </View>
-          <TouchableOpacity onPress={()=>navigation.navigate('SignUp')}
-          >
-            <Text>Sign up</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SignUp')}
+            style={
+              (styles.signIn,
+              {
+                marginTop: 15,
+              })
+            }>
+            <Text
+              style={[
+                styles.textSign,
+                {
+                  color: colors.youtube,
+                },
+              ]}>
+              Sign up
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -117,7 +166,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   footer: {
-    flex: 3,
+    flex: 5,
     backgroundColor: colors.white,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -148,7 +197,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 40,
   },
   signIn: {
     width: '100%',
@@ -156,7 +205,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: colors.youtube
+    backgroundColor: colors.youtube,
   },
   textSign: {
     fontSize: 18,
@@ -167,6 +216,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 35,
   },
+  errorMsg: {
+    color: colors.red,
+    fontSize: 12
+  }
 });
 
 export default Login;
