@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   StatusBar,
+  Alert
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -16,10 +17,13 @@ import { useNavigation } from '@react-navigation/native';
 
 import { ApiService } from '../services';
 import { useAuth } from '../context';
+import Button from '../components/Button';
 
 const Login = () => {
   const navigation = useNavigation();
   const [, setIsLoggedIn] = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const [data, setData] = useState({
     email: '',
@@ -88,16 +92,36 @@ const Login = () => {
 
   const onSignInPress = async () => {
     try {
-      await ApiService.post('auth/login', {
+      setLoading(true);
+      const res = await ApiService.post('auth/login', {
         username: data.email,
         password: data.password,
       });
+     // const cookie = res.headers?.['set-cookie']?.[0];
+
+      /*if (cookie) {
+        const ACCESS_TOKEN_STRING = 'access-token=';
+        const MAX_AGE_STRING = '; Max-Age';
+        const splitted = cookie.split(MAX_AGE_STRING)[0];
+        const token = splitted.substr(ACCESS_TOKEN_STRING.length);
+        console.log(token)
+
+
+        ***********************************************
+        Kada se register 1. put uspije i dobijem token i onda radi login s tim tokenom sta god ukucam u login
+        
+      }*/
+      const token=res.data.token
+      console.log(token);
 
       setIsLoggedIn(true);
     } catch (err) {
-      console.log('-------err-------');
-      console.log(err);
-      console.log('-------err-------\n');
+      setError(err.response?.data?.error ?? err.message ?? 'An error occurred');
+      Alert.alert('Login failed!', 'Check your Username and password and try again.',[
+        {text: 'Try again'}
+      ])
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,9 +174,13 @@ const Login = () => {
         )}
 
         <View style={styles.button}>
-          <TouchableOpacity style={styles.signIn} onPress={onSignInPress}>
-            <Text style={[styles.textSign, { color: colors.white }]}>Sign in</Text>
-          </TouchableOpacity>
+          <Button
+            text="Sign in"
+            onPress={onSignInPress}
+            loading={loading}
+            containerStyle={styles.signIn}
+            textStyle={[styles.textSign, { color: colors.white }]}
+          />
           <TouchableOpacity
             onPress={onSignUpPress}
             style={[
@@ -165,10 +193,10 @@ const Login = () => {
               style={[
                 styles.textSign,
                 {
-                  color: colors.youtube,
+                  color: colors.white,
                 },
               ]}>
-              Sign up
+              Register
             </Text>
           </TouchableOpacity>
         </View>

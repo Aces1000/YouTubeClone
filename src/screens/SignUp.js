@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   StatusBar,
+  Alert,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
@@ -14,9 +15,12 @@ import { colors } from '../style';
 import { useNavigation } from '@react-navigation/native';
 
 import { ApiService } from '../services';
+import Button from '../components/Button';
 
 const Login = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -79,9 +83,9 @@ const Login = () => {
       });
     }
   };
-
   const onSignUpPress = async () => {
     try {
+      setLoading(true);
       const res = await ApiService.post('auth/signup', {
         username: data.email,
         password: data.password,
@@ -90,13 +94,27 @@ const Login = () => {
         description: 'asdsadsa',
       });
 
-      console.log('-------res-------');
-      console.log(res);
-      console.log('-------res-------\n');
+      /* const cookie = res.headers?.['set-cookie']?.[0];
+
+      if (cookie) {
+        const ACCESS_TOKEN_STRING = 'access-token=';
+        const MAX_AGE_STRING = '; Max-Age';
+        const splitted = cookie.split(MAX_AGE_STRING)[0];
+        const token = splitted.substr(ACCESS_TOKEN_STRING.length);
+      }*/
+      const token = res.data.token;
+      console.log(token);
+      setIsLoggedIn(true);
+      navigation.navigate('Login');
+      console.log('Registrovao sam se');
     } catch (err) {
-      console.log('-------err-------');
-      console.log(err);
-      console.log('-------err-------\n');
+      console.log('kako je greska');
+      setError(err.response?.data?.error ?? err.message ?? 'An error');
+      Alert.alert('Register failed!', 'Check your Username and password and try again.', [
+      { text: 'Try again' },
+      ]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,7 +127,7 @@ const Login = () => {
       <View style={styles.footer}>
         <Text style={styles.text_footer}>Username</Text>
         <View style={styles.action}>
-          <FontAwesome name="user-o" color={colors.blue} size={20} />
+          <FontAwesome style={styles.icon} name="user-o" color={colors.blue} size={20} />
           <TextInput
             onChangeText={(val) => textInputChange(val)}
             placeholder="Your Username"
@@ -118,7 +136,7 @@ const Login = () => {
             onEndEditing={(e) => handleValidUser(e.nativeEvent.text)}
           />
           {data.chech_textInputChange ? (
-            <Feather name="check-circle" color={colors.green} size={20} />
+            <Feather style={styles.icon} name="check-circle" color={colors.green} size={20} />
           ) : null}
         </View>
         {data.isValidUser ? null : (
@@ -126,7 +144,7 @@ const Login = () => {
         )}
         <Text style={styles.password}>Password</Text>
         <View style={styles.action}>
-          <FontAwesome name="lock" color={colors.blue} size={20} />
+          <FontAwesome style={styles.icon} name="lock" color={colors.blue} size={20} />
           <TextInput
             secureTextEntry={data.secureTextEntry ? true : false}
             placeholder="Your Password"
@@ -136,9 +154,9 @@ const Login = () => {
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
             {data.secureTextEntry ? (
-              <Feather name="eye-off" color={colors.gray} size={20} />
+              <Feather style={styles.icon} name="eye-off" color={colors.gray} size={20} />
             ) : (
-              <Feather name="eye" color={colors.gray} size={20} />
+              <Feather style={styles.icon} name="eye" color={colors.gray} size={20} />
             )}
           </TouchableOpacity>
         </View>
@@ -147,7 +165,7 @@ const Login = () => {
         )}
         <Text style={styles.password}> Confirm Password</Text>
         <View style={styles.action}>
-          <FontAwesome name="lock" color={colors.blue} size={20} />
+          <FontAwesome style={styles.icon} name="lock" color={colors.blue} size={20} />
           <TextInput
             secureTextEntry={data.secureTextEntry ? true : false}
             placeholder="Confirm your Password"
@@ -157,9 +175,9 @@ const Login = () => {
           />
           <TouchableOpacity onPress={updateSecureTextEntry}>
             {data.secureTextEntry ? (
-              <Feather name="eye-off" color={colors.gray} size={20} />
+              <Feather style={styles.icon} name="eye-off" color={colors.gray} size={20} />
             ) : (
-              <Feather name="eye" color={colors.gray} size={20} />
+              <Feather style={styles.icon} name="eye" color={colors.gray} size={20} />
             )}
           </TouchableOpacity>
         </View>
@@ -168,9 +186,13 @@ const Login = () => {
         )}
 
         <View style={styles.button}>
-          <TouchableOpacity style={styles.signIn} onPress={onSignUpPress}>
-            <Text style={[styles.textSign, { color: colors.white }]}> Sign Up</Text>
-          </TouchableOpacity>
+          <Button
+            text="Register"
+            onPress={onSignUpPress}
+            loading={loading}
+            containerStyle={styles.signIn}
+            textStyle={[styles.textSign, { color: colors.white }]}
+          />
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             style={[
@@ -183,7 +205,7 @@ const Login = () => {
               style={[
                 styles.textSign,
                 {
-                  color: colors.youtube,
+                  color: colors.white,
                 },
               ]}>
               Sign in
@@ -207,7 +229,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   footer: {
-    flex: 9,
+    flex: 4,
     backgroundColor: colors.white,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -221,6 +243,7 @@ const styles = StyleSheet.create({
   },
   text_footer: {
     color: colors.blue,
+    marginBottom: -12,
     fontSize: 18,
   },
   action: {
@@ -232,13 +255,14 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    marginTop: 5,
+    marginTop: 25,
     paddingLeft: 10,
     color: colors.blue,
   },
   button: {
     alignItems: 'center',
     marginTop: 50,
+    marginTop: 65,
   },
   signIn: {
     width: '100%',
@@ -256,12 +280,18 @@ const styles = StyleSheet.create({
   password: {
     color: colors.blue,
     fontSize: 18,
-    marginTop: 20,
+    marginTop: 25,
+    marginBottom: -12,
   },
   errorMsg: {
     color: colors.red,
     fontSize: 12,
   },
+  icon: {
+    marginTop: 25,
+  },
 });
 
 export default Login;
+
+//

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     height: 45,
     width: '100%',
     backgroundColor: colors.white,
-    marginTop: 5,
+    marginTop: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
     elevation: 4,
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   youtube: {
     flexDirection: 'row',
-    margin: 5,
+    marginTop: 5
   },
   text: {
     fontSize: 22,
