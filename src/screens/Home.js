@@ -6,12 +6,10 @@ import { useRequest } from '../hooks';
 import Header from '../components/Header';
 
 const Home = () => {
-  const { loading } = useRequest(
-    async () => await new Promise((resolve) => setTimeout(resolve, 3000)),
-  );
+  
 
   return (
-    <SafeAreaView loading={loading} center>
+    <SafeAreaView center>
       <Header />
       <ListItem />
     </SafeAreaView>

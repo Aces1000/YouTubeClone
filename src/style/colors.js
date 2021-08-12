@@ -1,5 +1,5 @@
 const colors = {
-  appBackground: '#181818',
+  appBackground: 'white',
   white: '#FFF',
   black: '#000',
   gray: '#444444',

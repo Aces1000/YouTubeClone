@@ -2,10 +2,11 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
-import { Home, Search, Notifications } from '../screens';
+import { Home, Search} from '../screens';
 import VideoDetails from '../screens/VideoDetails';
 import { colors } from '../style';
 import SignUp from '../screens/SignUp';
+import UserVideos from '../screens/UserVideos';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,8 +21,8 @@ const BottomTabs = () => (
           iconName = 'home';
         } else if (route.name === 'Search') {
           iconName = 'search';
-        } else if (route.name === 'Notifications') {
-          iconName = 'bell';
+        } else if (route.name === 'User') {
+          iconName = 'user';
         }
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
@@ -32,7 +33,7 @@ const BottomTabs = () => (
     }}>
     <Tab.Screen name="Home" component={Home} />
     <Tab.Screen name="Search" component={Search} />
-    <Tab.Screen name="Notifications" component={Notifications} />
+    <Tab.Screen name="User" component={UserVideos} />
   </Tab.Navigator>
 );
 

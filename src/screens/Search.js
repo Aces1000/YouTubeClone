@@ -1,41 +1,64 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView, Text } from '../components';
 import { colors } from '../style';
-//import SearchBar from '../components/SearchBar';
+import { Ionicons } from '@expo/vector-icons';
+import MiniCard from '../components/MiniCard';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 const Search = () => {
-  const [value, setValue] = useState();
-  const updateSearch = (value) => {
-    //do search logic
-    console.log(value)
-  };
+  const navigation = useNavigation()
+  const [value, setValue] = useState('');
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image style={styles.image} source={require('../../assets/favicon.png')} />
-       {/* <SearchBar value={value} updateSearch={updateSearch} style={styles.searchBar} />*/}
+        <Ionicons name="md-arrow-back" size={32} onPress={() => navigation.goBack()} />
+        <TextInput
+          placeholder="Search..."
+          style={styles.text}
+          value={value}
+          onChangeText={() => setValue(text)}
+        />
+        <TouchableOpacity onPress={()=>getData()}>
+          <Ionicons style={styles.icon} name="md-send" size={24} />
+        </TouchableOpacity>
       </View>
+      <ScrollView>
+        <MiniCard />
+        <MiniCard />
+        <MiniCard />
+        <MiniCard />
+        <MiniCard />
+        <MiniCard />
+        <MiniCard />
+        <MiniCard />
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.milk,
     flex: 1,
+    flexDirection: 'column',
   },
   header: {
-    height: '30%',
-    backgroundColor: colors.youtube,
-    borderRadius: 20,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    elevation: 5,
+    backgroundColor: colors.white,
   },
-  image: {
-    marginTop: '15%',
-    marginLeft: '5%',
+  text: {
+    width: '70%',
+    borderColor: colors.black,
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 30,
+    marginTop: 3,
   },
-  searchBar: {
-    marginTop: '8%',
+  icon: {
+    marginTop: 4,
   },
 });
 export default Search;

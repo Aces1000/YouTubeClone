@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Video } from 'expo-av';
 import { colors } from '../style';
+import Comment from '../components/Comment';
 
 const VideoDetails = ({ route }) => {
   console.log(route.params);
@@ -17,13 +18,14 @@ const VideoDetails = ({ route }) => {
           useNativeControls
           resizeMode="contain"
         />
+        <Comment />
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: colors.black,
+    backgroundColor: colors.white,
   },
   card: {
     marginTop: 250,
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
   video: {
     height: 300,
     width: 300
-  }
+  },
 });
 
 export default VideoDetails;

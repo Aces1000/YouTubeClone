@@ -13,13 +13,14 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../style';
 import { useNavigation } from '@react-navigation/native';
-
+import { useAuth } from '../context';
 import { ApiService } from '../services';
 import Button from '../components/Button';
 
 const Login = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+  const [, setIsLoggedIn] = useAuth();
   const [error, setError] = useState('');
   const [data, setData] = useState({
     email: '',
@@ -104,9 +105,8 @@ const Login = () => {
       }*/
       const token = res.data.token;
       console.log(token);
-      setIsLoggedIn(true);
-      navigation.navigate('Login');
       console.log('Registrovao sam se');
+       setIsLoggedIn(true);
     } catch (err) {
       console.log('kako je greska');
       setError(err.response?.data?.error ?? err.message ?? 'An error');
