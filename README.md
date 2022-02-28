@@ -1,2 +1,2 @@
 # YouTubeClone
-Mobilna aplikacija koja je imitacija YouTube-a, tj. pretstavlja jednostavniju kopiju YouTube-a. Napravljena je u React Native-u.
+A mobile application that is an imitation of YouTube, ie. represents a simpler copy of YouTube. It was made in React Native.
