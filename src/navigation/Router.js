@@ -7,7 +7,7 @@ import { useAuth } from '../context';
 const Router = () => {
   const [isLoggedIn] = useAuth();
 
-  return isLoggedIn ? <Login /> : <AuthRouter />;
+  return isLoggedIn ? <AppRouter /> : <AuthRouter />;
 };
 
 export default Router;

@@ -7,7 +7,9 @@ const colors = {
   pozadina: '#009387',
   blue: '#05375a',
   milk: '#f2f2f2',
-  youtube: '#E62117'
+  youtube: '#E62117',
+  green: 'green',
+  icon: '#212121'
 };
 
 export default colors;
